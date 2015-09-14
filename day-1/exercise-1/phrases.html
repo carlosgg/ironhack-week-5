@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+</head>
+<body>
+
+	<p></p>
+	<button id="myButton">Click</button>
+
+	<script>
+		var phrases = ['I like pies', 'Lorem ipsum dolor est', 'Make sure this is a random sentence'];
+
+
+		$('#myButton').on('click', function(event) {
+        event.preventDefault();
+        
+        var phrase = phrases[Math.floor(Math.random() * phrases.length)];
+		  	
+		  	$('p').text(phrase);
+
+      });
+
+
+	
+	</script>
+
+</body>
+</html>

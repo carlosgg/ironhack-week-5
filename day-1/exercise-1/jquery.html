@@ -69,10 +69,10 @@
 <body>
   <h1>Business Card Builder</h1>
   <form>
-    <input type="text" name="name" placeholder="Name">
-    <input type="text" name="job-title" placeholder="Job title">
-    <input type="text" name="phone" placeholder="Phone">
-    <input type="text" name="email" placeholder="Email">
+    <input type="text" name="name" placeholder="Name" >
+    <input type="text" name="job-title" placeholder="Job title" >
+    <input type="text" name="phone" placeholder="Phone" >
+    <input type="text" name="email" placeholder="Email" >
     <button id="submit">Submit</button>
     <div class="colours">
       <button class="blue">Blue</button>
@@ -96,8 +96,9 @@
  
   <script>
     (function() {
-      $('#submit').on('click', function(event) {
-        event.preventDefault()
+    	var card = $('.biz-card');
+      $('form').on('click', function(event) {
+        event.preventDefault();
         // your code for creating the business card goes here
         // get the values from the form fields
         // add them to the business card
@@ -109,24 +110,26 @@
         $('p#name').text(name);
         $('p#job-title').text(job);
         $('li#phone').text(phone);
-        $('li#email').html("<a href='mailto:hi@sample.es'>" + email + "</a>");
+        $('li#email').html("<a href='mailto: ' + 'email>" + email + "</a>");
         
-        
-
       });
+      
       $('button.blue').on('click', function(event) {
         event.preventDefault();
         // your code for changing the colours goes here
         // add the 'blue' class business card
-				$('div.biz-card').removeClass('yellow').addClass('blue');
+				card.removeClass('yellow').toggleClass('blue');
+
       });
       $('button.yellow').on('click', function(event) {
-        event.preventDefault()
+        event.preventDefault();
         // your code for changing the colours goes here
         // add the 'yellow' class business card
         // you can also make your own classes and add them!
-        $('div.biz-card').removeClass('blue').addClass('yellow');
+        card.removeClass('blue').toggleClass('yellow');
       });
+
+
     })()
 
 
