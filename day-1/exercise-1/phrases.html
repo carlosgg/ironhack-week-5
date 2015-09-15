@@ -6,23 +6,58 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 </head>
 <body>
+	<form>
+		<p></p>
+		
+		<div><input type="text" name="name" placeholder="Type a phrase"></div>
+		<button id="myButton">Click</button>
+		<input type="button" id="show" value="Hide"/>
+	</form>
 
-	<p></p>
-	<button id="myButton">Click</button>
+	<ul id="list"></ul>
+
 
 	<script>
 		var phrases = ['I like pies', 'Lorem ipsum dolor est', 'Make sure this is a random sentence'];
 
+		phrases.forEach(function(item) {
+    		$('#list').prepend("<li>" + item + "<button class='delete'>X</button>" + "</li>");
+		});
 
-		$('#myButton').on('click', function(event) {
-        event.preventDefault();
+
+		$('form').on('submit', function(event) {
+        	event.preventDefault();
         
-        var phrase = phrases[Math.floor(Math.random() * phrases.length)];
-		  	
+       		var phrase = phrases[Math.floor(Math.random() * phrases.length)];
 		  	$('p').text(phrase);
+			var name = $( "[name='name']" ).val();
+			phrases.push(name);
 
-      });
+			$('#list').prepend("<li>" + name + "<button class='delete'>X</button>" + "</li>");
 
+		});
+
+		$('#show').on('click', function(event) { 
+			event.preventDefault();
+			
+			$("#list").toggle('#show');
+
+			if ( $('#show').val() === 'Hide' ) {
+				$('#show').val('Show');
+				} else {
+				$('#show').val('Hide');
+			}
+			
+		})
+
+		$('.delete').on('click', function(event) {
+			event.preventDefault();
+			console.log($(this.closest('li')));
+			$(this).parent().remove();
+		});
+
+		
+	
 
 	
 	</script>

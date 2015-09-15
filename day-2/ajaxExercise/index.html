@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+	<style>
+		body {
+			width: 80%;
+			margin: 0 auto;
+		}
+		form {
+			width: 60%;
+			margin-top: 20px;
+
+			text-align: center;
+		}
+		form input {
+			width: 80%;
+			height: 40px;
+			margin: 10px auto;
+		}
+		.xl {
+			width: 100%;
+		}
+		.js-character-list {
+			width: 80%;
+		}
+
+		table tr:first-child {
+			font-weight: 600;
+		}
+	</style>
+</head>
+<body>
+<table class="table table-striped js-character-list">
+	
+	<tr>
+		<td>NAME</td>
+		<td>OCCUPATION</td>
+		<td>WEAPON</td>
+	</tr>
+
+	
+	
+</table>
+
+<form>
+	
+	<div class="form-group">
+		<label for="exampleInputEmail1">Name</label>
+		<input type="text" class="form-control" name="name" id="name" placeholder="Name">
+	</div>
+	<div class="form-group">
+ 	    <label for="exampleInputEmail1">Occupation</label>
+		<input type="text" class="form-control" name="occupation" placeholder="Occupation">
+	</div>
+	<div class="form-group">
+    	<label for="exampleInputEmail1">Weapon</label>
+		<input type="text" class="form-control" name="weapon" placeholder="Weapon">
+	</div>
+	<button class="btn btn-success xl" id="myButton">Add Character</button>
+	
+</form>
+
+<script>
+	$(document).ready(function() {
+
+
+		///// list characters
+   		var characters = $.get('http://ironhack-characters.herokuapp.com/characters', showCharacters);
+		
+		function showCharacters (characters) {
+			event.preventDefault();
+
+			characters.forEach(function appendLi(chr){
+				var html = '<tr>' + '<td>' + chr.name + '</td>' + '<td>' + chr.occupation + '</td>' + '<td>' + chr.weapon + '</td>' + '</tr>';
+				$('.js-character-list' ).append(html);
+			});
+		}
+
+		/////// add character
+		$('form').on('submit', function(event) {
+        	event.preventDefault();
+
+			var name = $( "[name='name']" ).val();
+			var occupation = $( "[name='occupation']" ).val();
+			var weapon = $( "[name='weapon']" ).val();
+
+			var newCharacter = {
+        		name:  name,
+        		occupation: occupation,
+        		weapon: weapon,
+        	}
+
+        	var request = $.post('http://ironhack-characters.herokuapp.com/characters', newCharacter);
+
+    		
+		});
+
+	});
+
+
+	
+    		
+
+
+</script>
+	
+</body>
+</html>
