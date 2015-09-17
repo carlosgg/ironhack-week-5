@@ -1,0 +1,27 @@
+body {
+	background-color: #c2c2c2;
+}
+form {
+	width: 60%;
+	margin: 40px auto;
+	padding-bottom: 40px;
+}
+button {
+	float: right;
+}
+img {
+	max-width: 100px;
+}
+table {
+	background-color: #fff;
+}
+table h3 {
+	margin-left: 10px;
+}
+table button {
+	margin-top: 16px;
+	margin-right: 10px;
+}
+.xl {
+	width: 100%;
+}

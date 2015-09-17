@@ -4,26 +4,17 @@
 	<meta charset="UTF-8">
 	<title>Document</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/style.css">
+	<!-- Latest compiled and minified JavaScript -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-	<style>
-		form {
-			width: 60%;
-			margin: 40px auto;
-			padding-bottom: 40px;
-		}
-		button {
-			float: right;
-		}
-		img {
-			max-width: 100px;
-		}
-		
-	</style>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	
 </head>
 <body>
 
 	<div class="container">
 		<form>
+			<legend>Spotify search</legend>
 			<div class="form-group">
 				<label for="exampleInputEmail1">Artist name</label>
 				<input type="text" class="form-control" name="name" placeholder="Artist">
@@ -31,43 +22,93 @@
 			<button class="btn btn-success xl" id="myButton">Search</button>
 		</form>
 	
-
 		<table class="table table-striped js-artist-list">
 			<tr>
-				<td>NAME</td>
-				<td>IMAGE</td>
+				<td><strong>NAME</strong></td>
+				<td><strong>IMAGE</strong></td>
+				<td><strong>ACTION</strong></td>
 			</tr>
 		</table>
 
-	</div>
+		<!-- Modal -->
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		        <h4 class="modal-title" id="myModalLabel">List of albums</h4>
+		      </div>
+		      <div class="modal-body">
+		      	<ul></ul>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+
+	</div><!-- /container -->
 
 	
 	<script>
 		$(document).ready(function(){
 
 			$('form').on('submit', function(event) {
-				getArtist()
+				event.preventDefault();
+				getArtist();
 			});
 
 			function getArtist(){
 				event.preventDefault();
 				var artistName = $( "[name='name']" ).val();
-				var data = $.get('https://api.spotify.com/v1/search?q=' + artistName + '&type=artist', showArtistList);
+				var request = $.get('https://api.spotify.com/v1/search?q=' + artistName + '&type=artist');
+				request.done(showArtistList);
 			}
 
 			function showArtistList(data){
-				event.preventDefault();
-				console.log(data);
 
 				data.artists.items.forEach(function (i){
 					
-					var item = '<tr>' + '<td>' + i.name + '</td>' + '<td>' + '<img src=' + i.images[0].url + '>' + '</td>' + '</tr>';
-					$('.js-artist-list' ).append(item);
-				});
+					var item = '<tr><td><h3>' + i.name + '</h3></td><td><img src=' + i.images[0].url + '></td><td><button class="btn btn-warning showAlbums" id=' + i.id + ' data-toggle="modal" data-target="#myModal">Show albums</button></td></tr>';
+					$('.js-artist-list').append(item);
 				
+				});
+			}
+
+			$('body').on('click', 'button.showAlbums', function(event){
+				event.preventDefault();
+				var artistId = (this).id;
+				getAlbums(artistId);
+			})
+
+
+			function getAlbums(artistId){
+				var request = $.get('https://api.spotify.com/v1/artists/' + artistId + '/albums');
+				request.done(showAlbums);
 			}
 
 
+			function showAlbums(data){
+			
+				data.items.forEach(function (i){
+
+					var item = '<li>' + i.name + '</li>';
+					$('.modal-body ul').append(item);
+
+				});
+			}
+
+			// vaciamos el modal cada vez que se cierra
+			$('.modal').on('hidden.bs.modal', function(){ 
+				$(this).find('ul').empty(); //para borrar todos los datos que tenga los input, textareas, select.
+			});
+
+			// vaciamos el input cada vez que buscamos
+			$('#myButton').on('click', function(){ 
+				$('.js-artist-list').empty(); //para borrar todos los datos que tenga los input, textareas, select.
+			});
+		
 		});
 
 	</script>
