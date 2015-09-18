@@ -67,12 +67,10 @@
 			}
 
 			function showArtistList(data){
-
-				data.artists.items.forEach(function (i){
-					
-					var item = '<tr><td><h3>' + i.name + '</h3></td><td><img src=' + i.images[0].url + '></td><td><button class="btn btn-warning showAlbums" id=' + i.id + ' data-toggle="modal" data-target="#myModal">Show albums</button></td></tr>';
+				data.artists.items.forEach(function (artist){
+					var img = artist.images[0] || { url: 'http://placehold.it/100x100' }
+					var item = '<tr><td><h3>' + artist.name + '</h3></td><td><img src=' + img.url + '></td><td><button class="btn btn-warning showAlbums" id=' + artist.id + ' data-toggle="modal" data-target="#myModal">Show albums</button></td></tr>';
 					$('.js-artist-list').append(item);
-				
 				});
 			}
 
@@ -80,33 +78,28 @@
 				event.preventDefault();
 				var artistId = (this).id;
 				getAlbums(artistId);
-			})
-
+			});
 
 			function getAlbums(artistId){
 				var request = $.get('https://api.spotify.com/v1/artists/' + artistId + '/albums');
 				request.done(showAlbums);
-			}
-
+			};
 
 			function showAlbums(data){
-			
 				data.items.forEach(function (i){
-
 					var item = '<li>' + i.name + '</li>';
 					$('.modal-body ul').append(item);
-
 				});
-			}
+			};
 
 			// vaciamos el modal cada vez que se cierra
 			$('.modal').on('hidden.bs.modal', function(){ 
-				$(this).find('ul').empty(); //para borrar todos los datos que tenga los input, textareas, select.
+				$(this).find('ul').empty(); 
 			});
 
 			// vaciamos el input cada vez que buscamos
 			$('#myButton').on('click', function(){ 
-				$('.js-artist-list').empty(); //para borrar todos los datos que tenga los input, textareas, select.
+				$('.js-artist-list').empty(); 
 			});
 		
 		});

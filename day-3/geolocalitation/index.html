@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	<style>
+		#info {
+			margin-top: 12px;
+			color: black;
+		}
+	</style>
+</head>
+<body>
+
+	<div class="container">
+		
+		<div id="position">
+			<div class="container">
+				<input type="button" id="myButton" class="btn btn-warning" value="My location">
+				<input type="button" id="myButton2" class="btn btn-success" value="Show map">
+
+				<p id="info"></p>
+				<div id="imageMap"></div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		
+
+		$('#myButton').on('click', function(event) {
+			event.preventDefault();
+			
+			if("geolocation" in navigator) {
+				console.log("geolocation is available");
+			} else {
+				console.log("geolocation IS NOT available");
+			}
+
+			navigator.geolocation.getCurrentPosition(onLocation, onError);
+		
+			function onLocation (position) {
+				var latitude = position.coords.latitude;
+				var longitude = position.coords.longitude;
+				var info = 'LAT:' + latitude + ', LOT: ' + longitude + '.';
+				var position = 'LAT:' + latitude + ', LOT: ' + longitude + '.';
+				
+				$('#info').append("Your position is: " + info);
+			}
+
+			function onError (error) {
+				console.log(error);
+			}
+		})
+
+		$('#myButton2').on('click', function(event) {
+			event.preventDefault();
+
+			navigator.geolocation.getCurrentPosition(onLocation, onError);
+
+
+
+			function onLocation (position) {
+				var latitude = position.coords.latitude;
+				var longitude = position.coords.longitude;
+				var currentPosition = position.coords.longitude + ',' + position.coords.latitude + ',19/';
+				var mapId = 'mapbox.satellite/';
+				var TOKEN = '?access_token=pk.eyJ1IjoiY2dvbWV6YmdzIiwiYSI6ImNpZW1zdndybDAwMmNzdGtrdHozaHR1MHYifQ.yuZTjoiTr3acWux31I1s8Q';
+				var path = "<img src=https://api.mapbox.com/v4/" + mapId + currentPosition + '1024x500.png' + TOKEN + ">";
+				var info = 'LAT:' + latitude + ', LOT: ' + longitude + '.';
+	
+				$('#info').append("Your position is: " + info);
+				$('#imageMap').html(path);
+			}
+
+
+			function onError (error) {
+				console.log(error);
+			}
+			
+		})
+
+
+
+	</script>
+</body>
+</html>
+
